@@ -43,6 +43,18 @@ class Kelas extends CI_Controller
 		$params = array(
 			"kode_kelas" => $this->input->post("kode_kelas"),
 			"nama_kelas" => $this->input->post("nama_kelas"),
+			"jam_masuk1" => $this->input->post("jam_masuk1"),
+			"jam_pulang1" => $this->input->post("jam_pulang1"),
+			"jam_masuk2" => $this->input->post("jam_masuk2"),
+			"jam_pulang2" => $this->input->post("jam_pulang2"),
+			"jam_masuk3" => $this->input->post("jam_masuk3"),
+			"jam_pulang3" => $this->input->post("jam_pulang3"),
+			"jam_masuk4" => $this->input->post("jam_masuk4"),
+			"jam_pulang4" => $this->input->post("jam_pulang4"),
+			"jam_masuk5" => $this->input->post("jam_masuk5"),
+			"jam_pulang5" => $this->input->post("jam_pulang5"),
+			"jam_masuk6" => $this->input->post("jam_masuk6"),
+			"jam_pulang6" => $this->input->post("jam_pulang6"),
 		);
 		if ($this->kelas->save($params) === true) {
 			$this->session->set_flashdata("success", "kelas successfully created");
@@ -52,6 +64,20 @@ class Kelas extends CI_Controller
 
 		redirect("admin/kelas");
 	}
+
+
+	public function detail($id = null)
+	{
+		$data["active"] = "kelas";
+		$data["title"] = "Detail Kelas";
+		$data["kelas"] = $this->kelas->edit(array("kelas_id" => $id));
+		$data["page"] = "kelas/kelas_detail";
+		if (empty($data['kelas'])) {
+			redirect("admin/kelas");
+		}
+		$this->load->view("layouts/backend", array("contents" => $data));
+	}
+
 
 	public function edit($id = null)
 	{
@@ -71,6 +97,18 @@ class Kelas extends CI_Controller
 		$params = array(
 			"kode_kelas" => $this->input->post("kode_kelas"),
 			"nama_kelas" => $this->input->post("nama_kelas"),
+			"jam_masuk1" => $this->input->post("jam_masuk1"),
+			"jam_pulang1" => $this->input->post("jam_pulang1"),
+			"jam_masuk2" => $this->input->post("jam_masuk2"),
+			"jam_pulang2" => $this->input->post("jam_pulang2"),
+			"jam_masuk3" => $this->input->post("jam_masuk3"),
+			"jam_pulang3" => $this->input->post("jam_pulang3"),
+			"jam_masuk4" => $this->input->post("jam_masuk4"),
+			"jam_pulang4" => $this->input->post("jam_pulang4"),
+			"jam_masuk5" => $this->input->post("jam_masuk5"),
+			"jam_pulang5" => $this->input->post("jam_pulang5"),
+			"jam_masuk6" => $this->input->post("jam_masuk6"),
+			"jam_pulang6" => $this->input->post("jam_pulang6"),
 		);
 
 		$where = array("kelas_id" => $this->input->post("kelas_id"));
@@ -81,7 +119,6 @@ class Kelas extends CI_Controller
 			$this->session->set_flashdata("error", "kelas failed to changed.");
 		}
 		redirect("admin/kelas");
-
 	}
 
 	public function delete($id = null)

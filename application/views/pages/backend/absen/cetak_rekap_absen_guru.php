@@ -26,14 +26,14 @@ $pdf->SetFont('Arial', 'B', 16);
 $pdf->Cell(10, 7, '', 0, 1);
 $pdf->SetFont('Arial', 'B', 9);
 $pdf->Cell(10, 6, 'No', 1, 0, 'C');
-$pdf->Cell(50, 6, 'Nama Guru', 1, 0, 'C');
-$pdf->Cell(25, 6, 'Tanggal Masuk', 1, 0, 'C');
+$pdf->Cell(52, 6, 'Nama Guru', 1, 0, 'C');
+$pdf->Cell(32, 6, 'Tanggal Masuk', 1, 0, 'C');
 $pdf->Cell(25, 6, 'Jam Masuk', 1, 0, 'C');
-$pdf->Cell(25, 6, 'Scan Masuk', 1, 0, 'C');
-$pdf->Cell(25, 6, 'Terlambat', 1, 0, 'C');
-$pdf->Cell(25, 6, 'Tanggal Pulang', 1, 0, 'C');
+$pdf->Cell(20, 6, 'Scan Masuk', 1, 0, 'C');
+$pdf->Cell(20, 6, 'Terlambat', 1, 0, 'C');
+$pdf->Cell(32, 6, 'Tanggal Pulang', 1, 0, 'C');
 $pdf->Cell(25, 6, 'Jam Pulang', 1, 0, 'C');
-$pdf->Cell(25, 6, 'Scan Pulang', 1, 0, 'C');
+$pdf->Cell(20, 6, 'Scan Pulang', 1, 0, 'C');
 $pdf->Cell(25, 6, 'Pulang Cepat', 1, 1, 'C');
 $pdf->SetFont('Arial', '', 10);
 
@@ -57,41 +57,61 @@ foreach ($data_rekap as $data) {
 		$time_out = date_create($data->jam_pulang1);
 		$masuk = new DateTime($data->jam_masuk1);
 		$keluar = new DateTime($data->jam_pulang1);
+		$jadwal_masuk = $data->jam_masuk1;
+		$jadwal_pulang = $value->jam_pulang1;
 	} elseif ($dayList[$day] == "Selasa") {
 		$time_in = date_create($data->jam_masuk2);
 		$time_out = date_create($data->jam_pulang2);
 		$masuk = new DateTime($data->jam_masuk2);
 		$keluar = new DateTime($data->jam_pulang2);
+		$jadwal_masuk = $value->jam_masuk2;
+		$jadwal_pulang = $value->jam_pulang2;
 	} elseif ($dayList[$day] == "Rabu") {
 		$time_in = date_create($data->jam_masuk3);
 		$time_out = date_create($data->jam_pulang3);
 		$masuk = new DateTime($data->jam_masuk3);
 		$keluar = new DateTime($data->jam_pulang3);
+		$jadwal_masuk = $data->jam_masuk3;
+		$jadwal_pulang = $data->jam_pulang3;
 	} elseif ($dayList[$day] == "Kamis") {
 		$time_in = date_create($data->jam_masuk4);
 		$time_out = date_create($data->jam_pulang4);
 		$masuk = new DateTime($data->jam_masuk4);
 		$keluar = new DateTime($data->jam_pulang4);
+		$jadwal_masuk = $data->jam_masuk4;
+		$jadwal_pulang = $data->jam_pulang4;
 	} elseif ($dayList[$day] == "Jumat") {
 		$time_in = date_create($data->jam_masuk5);
 		$time_out = date_create($data->jam_pulang5);
 		$masuk = new DateTime($data->jam_masuk5);
 		$keluar = new DateTime($data->jam_pulang5);
+		$jadwal_masuk = $data->jam_masuk5;
+		$jadwal_pulang = $data->jam_pulang5;
 	} elseif ($dayList[$day] == "Sabtu") {
 		$time_in = date_create($data->jam_masuk6);
 		$time_out = date_create($data->jam_pulang6);
 		$masuk = new DateTime($data->jam_masuk6);
 		$keluar = new DateTime($data->jam_pulang6);
+		$jadwal_masuk = $data->jam_masuk6;
+		$jadwal_pulang = $data->jam_pulang6;
 	}
 
-
+	$pdf->SetFont('Arial', '', 9);
 
 	$no++;
 	$pdf->Cell(10, 6, $no, 1, 0, 'C');
-	$pdf->Cell(50, 6, $data->nama_guru, 1, 0);
-	$pdf->Cell(25, 6, $data->date, 1, 0, 'C');
-	$pdf->Cell(25, 6, date_format($time_in, 'H:i:s'), 1, 0, 'C');
-	$pdf->Cell(25, 6, $data->time, 1, 0, 'C');
+	$pdf->Cell(52, 6, $data->nama_guru, 1, 0);
+	$pdf->Cell(32, 6, $dayList[$day] . ", " . date_format(date_create($data->date), "d-m-Y"), 1, 0, 'C');
+
+	if ($jadwal_masuk === "") {
+		$pdf->SetFont('Arial', '', 9);
+		$pdf->Cell(25, 6, "Tidak ada jadwal", 1, 0, 'C');
+	} else {
+		$pdf->Cell(25, 6, date_format($time_in, 'H:i:s'), 1, 0, 'C');
+	}
+
+
+	$pdf->Cell(20, 6, $data->time, 1, 0, 'C');
 
 	date_add($time_in, date_interval_create_from_date_string('0 minutes'));
 	$jam_masuk_tambah = date_format($time_in, 'H:i:s');
@@ -100,15 +120,21 @@ foreach ($data_rekap as $data) {
 
 		$jam_masuk_tambah = $input_masuk->diff($masuk);
 		$terlambat = $jam_masuk_tambah->format("%H:%I:%S");
-		$pdf->Cell(25, 6, $terlambat, 1, 0, 'C');
+		$pdf->Cell(20, 6, $terlambat, 1, 0, 'C');
 	} else {
-		$pdf->Cell(25, 6, "-", 1, 0, 'C');
+		$pdf->Cell(20, 6, "-", 1, 0, 'C');
 	}
 
 
-	$pdf->Cell(25, 6, $data->date_out, 1, 0, 'C');
-	$pdf->Cell(25, 6, date_format($time_out, 'H:i:s'), 1, 0, 'C');
-	$pdf->Cell(25, 6, $data->time_out, 1, 0, 'C');
+	$pdf->Cell(32, 6, $data->date_out, 1, 0, 'C');
+
+	if ($jadwal_pulang === "") {
+		$pdf->SetFont('Arial', '', 9);
+		$pdf->Cell(25, 6, "Tidak ada jadwal", 1, 0, 'C');
+	} else {
+		$pdf->Cell(25, 6, date_format($time_out, 'H:i:s'), 1, 0, 'C');
+	}
+	$pdf->Cell(20, 6, $data->time_out, 1, 0, 'C');
 
 	if ($time_out > $data->time_out) {
 		$input_keluar = new DateTime($data->time_out);

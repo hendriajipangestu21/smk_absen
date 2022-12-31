@@ -84,6 +84,24 @@ class Siswa extends CI_Controller
 		$this->load->view("layouts/backend", array("contents" => $data));
 	}
 
+
+
+	public function detail($id = null)
+	{
+		$data["active"] = "siswa";
+		$data["title"] = "siswa Detail";
+		$data["siswa"] = $this->siswa->detail(array("siswa_id" => $id));
+		$data["kelas"] = $this->kelas->all();
+		$data["page"] = "siswa/siswa_detail";
+		if (empty($data['siswa'])) {
+			redirect("admin/siswa");
+		}
+		$this->load->view("layouts/backend", array("contents" => $data));
+	}
+
+
+
+
 	public function update()
 	{
 

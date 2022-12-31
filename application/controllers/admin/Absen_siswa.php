@@ -33,6 +33,11 @@ class Absen_siswa extends CI_Controller
 
     public function rekap_absen_siswa()
     {
+        if (($this->input->get("kelas_id") != "")) {
+            $kelas_id = $this->input->get("kelas_id");
+        } else {
+            $kelas_id = "all";
+        }
         if (($this->input->get("filter_awal") != "") && ($this->input->get("filter_akhir") != "")) {
             $filter_awal = $this->input->get("filter_awal");
             $filter_akhir = $this->input->get("filter_akhir");
@@ -42,7 +47,8 @@ class Absen_siswa extends CI_Controller
         }
         $data["active"] = "rekap_absen_siswa";
         $data["title"] = "Rekap Absensi Siswa";
-        $data["data_rekap"] = $this->rekap_absen->rekap_absen_siswa(array("filter_awal" => $filter_awal, "filter_akhir" => $filter_akhir));
+        $data["data_rekap"] = $this->rekap_absen->rekap_absen_siswa(array("filter_awal" => $filter_awal, "filter_akhir" => $filter_akhir, "kelas_id" => $kelas_id));
+        $data["kelas"] = $this->kelas->all();
         $data["page"] = "absen/rekap_absen_siswa";
         $this->load->view("layouts/backend", array("contents" => $data));
     }

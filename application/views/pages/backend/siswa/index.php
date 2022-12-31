@@ -27,6 +27,7 @@
 						<!-- <td><?= $user->username ?></td> -->
 						<td><?= $user->nama_kelas ?> - <?= $user->kode_kelas ?></td>
 						<td>
+							<a href="<?= base_url("admin/siswa/detail/$user->siswa_id") ?>" class="btn btn-primary btn-sm"><i class="fas fa-info"></i></a>&emsp;
 							<a href="<?= base_url("admin/siswa/edit/$user->siswa_id") ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>&emsp;
 							<a href="<?= base_url("admin/siswa/delete/$user->siswa_id") ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ?')"><i class="fa fa-trash"></i></a>
 						</td>

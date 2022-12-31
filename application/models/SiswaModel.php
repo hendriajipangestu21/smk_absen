@@ -27,6 +27,15 @@ class SiswaModel extends CI_Model
 		return $this->db->get_where($this->table, $where)->row();
 	}
 
+	public function detail($where = array())
+	{
+		$this->db->join("$this->table_kelas", "$this->table.kelas_id=$this->table_kelas.kelas_id", "LEFT");
+		if (!empty($where)) {
+			$this->db->where($where);
+		}
+		return $this->db->get($this->table)->row();
+	}
+
 	public function update($params = array(), $where = array())
 	{
 		$this->db->update($this->table, $params, $where);

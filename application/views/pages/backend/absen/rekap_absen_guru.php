@@ -77,31 +77,43 @@
 						$time_out = date_create($value->jam_pulang1);
 						$masuk = new DateTime($value->jam_masuk1);
 						$keluar = new DateTime($value->jam_pulang1);
+						$jadwal_masuk = $value->jam_masuk1;
+						$jadwal_pulang = $value->jam_pulang1;
 					} elseif ($dayList[$day] == "Selasa") {
 						$time_in = date_create($value->jam_masuk2);
 						$time_out = date_create($value->jam_pulang2);
 						$masuk = new DateTime($value->jam_masuk2);
 						$keluar = new DateTime($value->jam_pulang2);
+						$jadwal_masuk = $value->jam_masuk2;
+						$jadwal_pulang = $value->jam_pulang2;
 					} elseif ($dayList[$day] == "Rabu") {
 						$time_in = date_create($value->jam_masuk3);
 						$time_out = date_create($value->jam_pulang3);
 						$masuk = new DateTime($value->jam_masuk3);
 						$keluar = new DateTime($value->jam_pulang3);
+						$jadwal_masuk = $value->jam_masuk3;
+						$jadwal_pulang = $value->jam_pulang3;
 					} elseif ($dayList[$day] == "Kamis") {
 						$time_in = date_create($value->jam_masuk4);
 						$time_out = date_create($value->jam_pulang4);
 						$masuk = new DateTime($value->jam_masuk4);
 						$keluar = new DateTime($value->jam_pulang4);
+						$jadwal_masuk = $value->jam_masuk4;
+						$jadwal_pulang = $value->jam_pulang4;
 					} elseif ($dayList[$day] == "Jumat") {
 						$time_in = date_create($value->jam_masuk5);
 						$time_out = date_create($value->jam_pulang5);
 						$masuk = new DateTime($value->jam_masuk5);
 						$keluar = new DateTime($value->jam_pulang5);
+						$jadwal_masuk = $value->jam_masuk5;
+						$jadwal_pulang = $value->jam_pulang5;
 					} elseif ($dayList[$day] == "Sabtu") {
 						$time_in = date_create($value->jam_masuk6);
 						$time_out = date_create($value->jam_pulang6);
 						$masuk = new DateTime($value->jam_masuk6);
 						$keluar = new DateTime($value->jam_pulang6);
+						$jadwal_masuk = $value->jam_masuk6;
+						$jadwal_pulang = $value->jam_pulang6;
 					}
 
 
@@ -112,14 +124,20 @@
 						<td><?= ($key + 1) ?></td>
 						<td><?= $value->nama_guru ?></td>
 						<td><?= $dayList[$day] . ", " . date_format(date_create($value->date), "d-m-Y") ?></td>
-						<td><?= date_format($time_in, 'H:i:s'); ?></td>
+						<?php
+						if ($jadwal_masuk === "") {
+						?>
+							<td>Tidak ada jadwal</td>
+						<?php
+						} else { ?>
+							<td><?= date_format($time_in, 'H:i:s'); ?></td>
+						<?php } ?>
 						<td><?= $value->time ?></td>
 						<?php
 						date_add($time_in, date_interval_create_from_date_string('0 minutes'));
 						$jam_masuk_tambah = date_format($time_in, 'H:i:s');
 						if ($value->time > $jam_masuk_tambah) {
 							$input_masuk = new DateTime($value->time);
-
 
 							$jam_masuk_tambah = $input_masuk->diff($masuk);
 							$terlambat = $jam_masuk_tambah->format("%H:%I:%S");
@@ -131,7 +149,15 @@
 							<td><?= "-"; ?></td>
 						<?php } ?>
 						<td><?= $dayList[$day] . ", " . date_format(date_create($value->date_out), "d-m-Y"); ?></td>
-						<td><?= date_format($time_out, 'H:i:s'); ?></td>
+
+						<?php
+						if ($jadwal_pulang === "") {
+						?>
+							<td>Tidak ada jadwal</td>
+						<?php
+						} else { ?>
+							<td><?= date_format($time_out, 'H:i:s'); ?></td>
+						<?php } ?>
 						<td><?= $value->time_out ?></td>
 
 						<?php if (!empty($value->time_out)) {

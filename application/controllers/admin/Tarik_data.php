@@ -180,12 +180,15 @@ class Tarik_data extends CI_Controller
 
 
             $query_absen = $this->db->get_where('data_absen', ['user_id' => $PIN, 'verified' => $Verified, 'date' => $tanggal])->row();
+            $query_user = $this->db->get_where('guru', ['user_id' => $PIN])->row();
+            $query_siswa = $this->db->get_where('siswa', ['user_id' => $PIN])->row();
+
 
             // $date1 = $DateTime;
             // $date = new DateTime($date1);
             // $tanggal = $date->format("Y-m-d");
 
-            if (!$query_absen) {
+            if ((!$query_absen && $query_user) || !$query_absen && $query_siswa) {
                 if ($Status === '0') {
                     $input++;
                     $data = [
@@ -208,6 +211,7 @@ class Tarik_data extends CI_Controller
 
                     $where = [
                         'user_id' => $PIN,
+                        'date' => $tanggal
                     ];
 
                     $query_absen_pulang = $this->db->get_where('data_absen', ['user_id' => $PIN, 'verified' => $Verified, 'date' => $tanggal, 'status' => '1'])->row();

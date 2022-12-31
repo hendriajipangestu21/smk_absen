@@ -28,11 +28,13 @@ class RekapAbsenModel extends CI_Model
 	{
 		$this->db->join("$this->table_siswa", "$this->table.user_id=$this->table_siswa.user_id", "RIGHT");
 		$this->db->join("$this->table_kelas", "$this->table_siswa.kelas_id=$this->table_kelas.kelas_id", "LEFT");
-		if (!empty($where)) {
+		if (!empty($where) && $where['kelas_id'] === "all") {
 			$this->db->where('date >=', $where['filter_awal']);
 			$this->db->where('date <=', $where['filter_akhir']);
 		} else {
-			echo "kosong";
+			$this->db->where('date >=', $where['filter_awal']);
+			$this->db->where('date <=', $where['filter_akhir']);
+			$this->db->where($this->table_siswa . '.kelas_id', $where['kelas_id']);
 		}
 		return $this->db->order_by("$this->table_siswa.user_id", "DESC")->get($this->table)->result();
 	}
